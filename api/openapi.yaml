@@ -1,0 +1,59 @@
+openapi: 3.0.0
+info:
+  title: SI Templates
+  description: Template Configuration
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /generate_invoice:
+    post:
+      operationId: generate_invoicePOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/invoice_request'
+        required: true
+      responses:
+        "200":
+          description: Returns PDF
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+                x-content-type: application/pdf
+      x-swagger-router-controller: Default
+components:
+  schemas:
+    invoice_request:
+      title: Root Type for invoice_request
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/invoice_request_items'
+        signername:
+          type: string
+      description: ""
+      example:
+        items:
+        - name: Landing Page
+          description: The Landing page to the website
+          amount: 10000
+        - name: Payment Gate
+          description: ""
+          amount: 2000
+        signername: Zeeshan Irfan Pathan
+    invoice_request_items:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        amount:
+          type: integer
+          format: int32
